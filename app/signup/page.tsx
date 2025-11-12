@@ -16,7 +16,7 @@ export default function SignupPage() {
         </div>
 
         <div className="bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-6 text-center">Sign Up</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-center text-gray-900">Sign Up</h2>
 
           <form action={formAction} className="space-y-4">
             <div>
@@ -28,7 +28,7 @@ export default function SignupPage() {
                 name="email"
                 type="email"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-500"
                 placeholder="you@example.com"
               />
             </div>
@@ -43,7 +43,7 @@ export default function SignupPage() {
                 type="password"
                 required
                 minLength={6}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-500"
                 placeholder="••••••••"
               />
               <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
