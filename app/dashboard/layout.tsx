@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { signout } from '@/app/actions/auth'
 import Link from 'next/link'
+import MobileNav from '@/components/dashboard/MobileNav'
 
 export default async function DashboardLayout({
   children,
@@ -39,7 +40,9 @@ export default async function DashboardLayout({
                 </Link>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+
+            {/* Desktop User Info */}
+            <div className="hidden md:flex items-center space-x-4">
               <span className="text-sm text-gray-600">{user.email}</span>
               <form action={signout}>
                 <button
@@ -50,6 +53,9 @@ export default async function DashboardLayout({
                 </button>
               </form>
             </div>
+
+            {/* Mobile Hamburger */}
+            <MobileNav userEmail={user.email || ''} />
           </div>
         </div>
       </nav>

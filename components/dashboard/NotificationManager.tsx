@@ -24,10 +24,17 @@ export default function NotificationManager({
   const [permission, setPermission] = useState<NotificationPermission | null>(null)
   const [supported, setSupported] = useState(false)
   const [interval, setInterval] = useState<NodeJS.Timeout | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setSupported(checkNotificationSupport())
     setPermission(getNotificationPermission())
+
+    // Detect mobile device
+    const checkMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+    setIsMobile(checkMobile)
   }, [])
 
   useEffect(() => {
@@ -128,22 +135,38 @@ export default function NotificationManager({
 
   if (permission === 'granted') {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-        <div className="flex items-center">
-          <div className="flex-1">
-            <p className="text-green-900 font-medium mb-1">
-              ✓ Notifications Enabled
-            </p>
-            <p className="text-green-700 text-sm">
-              {isPaused
-                ? '⏸️ Notifications are paused'
-                : enabled
-                ? `You'll receive check-ins every ${frequency} minutes`
-                : 'Enable notifications in settings to start receiving reminders'}
-            </p>
+      <>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <div className="flex-1">
+              <p className="text-green-900 font-medium mb-1">
+                ✓ Notifications Enabled
+              </p>
+              <p className="text-green-700 text-sm">
+                {isPaused
+                  ? '⏸️ Notifications are paused'
+                  : enabled
+                  ? `You'll receive check-ins every ${frequency} minutes`
+                  : 'Enable notifications in settings to start receiving reminders'}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+
+        {/* Mobile Warning */}
+        {isMobile && (
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+            <p className="text-orange-900 font-medium mb-1">⚠️ Mobile Device Detected</p>
+            <p className="text-orange-700 text-sm mb-2">
+              Browser notifications on mobile require keeping this tab open and active. If you
+              close the tab or switch apps, notifications will stop.
+            </p>
+            <p className="text-orange-700 text-sm">
+              <strong>Tip:</strong> Keep this page pinned in your browser for best results.
+            </p>
+          </div>
+        )}
+      </>
     )
   }
 

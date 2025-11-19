@@ -9,13 +9,21 @@ export default async function DashboardPage() {
 
   if (!user) return null
 
-  // Fetch user's recent activities
-  const { data: activities } = await supabase
+  // Fetch available dates (lightweight query - just dates with activity counts)
+  const { data: dateCounts } = await supabase
     .from('activities')
-    .select('*')
+    .select('logged_at')
     .eq('user_id', user.id)
     .order('logged_at', { ascending: false })
-    .limit(50)
+
+  // Get most recent activity for "Same as Previous" button
+  const { data: recentActivity } = await supabase
+    .from('activities')
+    .select('activity_text')
+    .eq('user_id', user.id)
+    .order('logged_at', { ascending: false })
+    .limit(1)
+    .single()
 
   // Fetch user settings
   const { data: settings } = await supabase
@@ -44,12 +52,12 @@ export default async function DashboardPage() {
       <div className="grid gap-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Log Activity</h2>
-          <ActivityForm lastActivity={activities?.[0]?.activity_text} />
+          <ActivityForm lastActivity={recentActivity?.activity_text} />
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Activities</h2>
-          <ActivityList activities={activities || []} />
+          <ActivityList availableDates={dateCounts || []} />
         </div>
       </div>
     </div>
